@@ -3,7 +3,7 @@ import styles from '../styles/Home.module.css';
 import Header from '../components/header';
 import Main from '../components/main';
 
-export default function Home({data}) {
+export default function Home({ orders, customers }) {
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -11,16 +11,19 @@ export default function Home({data}) {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Header></Header>
-			<Main data={data}></Main>
+			<Main orders={orders} customers={customers}></Main>
 		</div>
 	);
 }
 
 export async function getServerSideProps() {
 	// Fetch data from external API
-	const res = await fetch(`https://northwind.now.sh/api/orders/`)
-	const data = await res.json()
-  
+	const res = await fetch(`https://northwind.now.sh/api/orders/`);
+	const orders = await res.json();
+
+	const res2 = await fetch(`https://northwind.now.sh/api/customers/`);
+	const customers = await res2.json();
+
 	// Pass data to the page via props
-	return { props: { data } }
+	return { props: { orders, customers } };
 }
